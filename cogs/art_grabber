@@ -1,0 +1,61 @@
+import discord
+from discord import app_commands
+from discord.ext import commands, tasks
+from dotenv import load_dotenv
+from config import GUILD
+
+import requests
+
+
+class Artgrabber(commands.Cog, name = "artgrabber"):
+
+    BASE_URL = "https://danbooru.donmai.us/posts.json"
+    def __init__(self, bot) -> None:
+        self.bot = bot
+    
+
+    @app_commands.command(
+        name = "random_art",
+        description= "Give a random art, from all resourses"
+    )
+    @app_commands.guilds(GUILD)
+    async def random_art(self, intraction: discord.Interaction,tag: str) -> None:
+        BAN_TAGS = ["guru", "explict", "sex"]
+        DEFAULT_LIMIT = 1
+        params = {
+            "tags": tag,
+            "limit": DEFAULT_LIMIT,
+            "random": True
+            }
+        headers = {
+        "user-agent": "prop.spell"
+    }
+        with requests.Session() as r:
+            r.headers.update(headers)
+        
+            try:
+                response = r.get(self.BASE_URL, params= params)
+                response.raise_for_status()
+                data = response.json()
+
+                if not data:
+                        await intraction.message.fetch("Empty page")
+                        
+                post = data[0]
+                    
+                tags_response = post["tag_string"].split()
+                for tag_response in tags_response:
+                        for tag_banned in  BAN_TAGS:
+                            print(tag_banned +" = " + tag_response)
+                            if tag_response == tag_banned:
+                                await intraction.message.fetch("Its banned tags")
+                image_url = post["file_url"]
+                await intraction.response.send_message(image_url)
+            except requests.RequestException as e:
+                print(f"request error: {e}")
+                
+
+async def setup(bot) -> None:
+    await bot.add_cog(Artgrabber(bot))
+
+
