@@ -19,8 +19,7 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
         description= "Give a random art, from all resourses"
     )
     @app_commands.guilds(GUILD)
-    async def random_art(self, intraction: discord.Interaction,tag: str) -> None:
-        BAN_TAGS = ["guro", "explict", "sex"]
+    async def random_art(self, interaction: discord.Interaction,tag: str) -> None:
         DEFAULT_LIMIT = 1
         params = {
             "tags": tag,
@@ -31,24 +30,25 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
         "user-agent": "prop.spell"
     }
         with requests.Session() as r:
-            # добавляем имя для запроса
             r.headers.update(headers)
  
             try:
                 response = r.get(self.BASE_URL, params= params)
                 response.raise_for_status()
                 data = response.json()
-                # Проверка на пустую страницу
+               
                 if not data:
-                    await intraction.message.fetch("Empty page")
-                # записываем 1й пост,теги и сравниваем их с бан листом      
+                    await interaction.response.send_message("Empty page")
+                    
                 post = data[0]   
-                RATING = post["information"]["rating"]
-                if RATING == "Explict" or RATING == "Questionable" :
+                RATING = post["rating"]
+                if RATING in ("e", "q" ):
                     print(RATING)
-                    await intraction.message.fetch("18+")
-                image_url = post["file_url"]
-                await intraction.response.send_message(image_url)
+                    await interaction.response.send_message("18+")
+                else:
+                    image_url = post["file_url"]
+                    await interaction.response.send_message(image_url)
+                    
             except requests.RequestException as e:
                 print(f"request error: {e}")
                 
