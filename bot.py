@@ -11,16 +11,15 @@ intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-COGS = ["art_grabber"]
+COG = "art_grabber"
 
 @bot.event
 async def on_ready():
-    for cog in COGS:
-        try:
-            await bot.load_extension(f"cogs.{cog}")
-            print(f"Загружен ког: {cog}")
-        except Exception as e:
-            print(f"Ошибка загрузки {cog}: {e}")
+    try:
+        await bot.load_extension(f"cogs.{COG}")
+        print(f"Загружен ког: {COG}")
+    except Exception as e:
+        print(f"Ошибка загрузки {COG}: {e}")
     await bot.tree.sync(guild=GUILD)
     print(f"Logged in as {bot.user}")
 
