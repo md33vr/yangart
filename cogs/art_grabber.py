@@ -4,11 +4,13 @@ from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from config import GUILD
 
+import logging
+
 import requests
 
 
 class Artgrabber(commands.Cog, name = "art_grabber"):
-
+    log = logging.getLogger(__name__)
     BASE_URL = "https://danbooru.donmai.us/posts.json"
     def __init__(self, bot) -> None:
         self.bot = bot
@@ -24,7 +26,8 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
         params = {
             "tags": tag,
             "limit": DEFAULT_LIMIT,
-            "random": True
+            "random": True,
+            
             }
         headers = {
         "user-agent": "prop.spell"
@@ -44,10 +47,15 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
                 RATING = post["rating"]
                 if RATING in ("e", "q" ):
                     print(RATING)
+                    print(post["file_url"])
                     await interaction.response.send_message("18+")
                 else:
+                    
                     image_url = post["file_url"]
+                    self.log.info("запрещенный контент: " + image_url)
+                    print(image_url)
                     await interaction.response.send_message(image_url)
+                    
                     
             except requests.RequestException as e:
                 print(f"request error: {e}")
