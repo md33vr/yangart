@@ -24,12 +24,14 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
     @app_commands.guilds(GUILD)
     async def random_art(self, interaction: discord.Interaction,tags: str) -> None:
         DEFAULT_LIMIT = 1
-        fx_tags = re.sub(r' ', '_', tags).split(":")
+        fx_tags = re.sub(r' ', '_', tags).replace(":", " ")
+        await interaction.response.defer()
         print(fx_tags)
         params = {
             "tags": fx_tags,
             "limit": DEFAULT_LIMIT,
             "random": True,
+            "rating": "g"
             
             }
         headers = {
@@ -42,23 +44,19 @@ class Artgrabber(commands.Cog, name = "art_grabber"):
                 response = r.get(self.BASE_URL, params= params)
                 response.raise_for_status()
                 data = response.json()
-                print(str(data))
+            
                 if not data:
-                    await interaction.response.send_message("Empty page")
-                    
-                post = data[0] 
-                print(str(post))  
-                RATING = post["rating"]
+                    await interaction.followup.send("Empty page")
+                    return None
                 
-                print(RATING)
-                print(post["file_url"])
-                # while RATING in ("e", "q"):
-                #     n = 1
-                #     post = data[1]
-                #     n +=1
-
+                post = data[0] 
+                 
+                RATING = post["rating"]               
+                print(RATING) 
                 image_url = post["file_url"]
-                await interaction.response.send_message(image_url)   
+                print(image_url)
+            
+                await interaction.followup.send(image_url)   
                     
                     
                     
