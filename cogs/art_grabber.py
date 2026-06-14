@@ -45,6 +45,18 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         except requests.RequestException as e:
             log.error("request error: %s", e)
             return None
+    @app_commands.command(
+        name="test",
+        description="test",
+    )
+   
+    async def test(self, interaction: discord.Interaction, ):
+        await interaction.response.defer()
+        print(interaction.channel_id)
+        await interaction.followup.send("id канала: " + str(interaction.channel_id))
+
+
+
 
 
 async def setup(bot) -> None:
