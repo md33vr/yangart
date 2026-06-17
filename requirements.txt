@@ -1,0 +1,6 @@
+discord.py==2.7.1
+SQLAlchemy==2.0.51
+aiomysql==0.3.2
+pydantic-settings==2.14.1
+python-dotenv==1.2.2
+requests==2.34.2
