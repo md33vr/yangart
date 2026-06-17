@@ -2,6 +2,7 @@ import discord
 from config import TOKEN, GUILD
 from discord.ext import commands
 from discord import app_commands
+from database.queries import AsyncOrm
 
 
 
@@ -15,8 +16,12 @@ COG = "art_grabber"
 
 @bot.event
 async def on_ready():
+    
+    await AsyncOrm.create_tables()
+
     try:
         await bot.load_extension(f"cogs.{COG}")
+        
         print(f"Загружен ког: {COG}")
     except Exception as e:
         print(f"Ошибка загрузки {COG}: {e}")
