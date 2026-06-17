@@ -6,6 +6,8 @@ from discord import app_commands
 from discord.ext import commands
 
 from config import GUILD
+from database.queries import AsyncOrm
+from database.models import ChannelType
 
 log = logging.getLogger(__name__)
 
@@ -50,10 +52,12 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         description="test",
     )
    
-    async def test(self, interaction: discord.Interaction, ):
+    async def test(self, interaction: discord.Interaction, channel_type: ChannelType ):
         await interaction.response.defer()
         print(interaction.channel_id)
-        await interaction.followup.send("id канала: " + str(interaction.channel_id))
+        await AsyncOrm.update_chanell(interaction.guild_id,channel_type, interaction.channel_id)
+        await interaction.followup.send("канал: " + str(interaction.channel_id) + "установлен как nsfw")
+
 
 
 

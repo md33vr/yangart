@@ -35,13 +35,17 @@ class Locate(enum.Enum):
     en = "english"
     ru = "russian" 
 
-class GuildSettings(Base):
+class ChannelType(enum.Enum):
+    nsfw = "nsfw_channel"
+    welcome = "welcome_channel"
+    logs = "log_channel"
+
+class GuildSettingsOrm(Base):
     __tablename__ = "guild_settings"
     
     guild_id: Mapped[int] = mapped_column(ForeignKey("guilds.guild_id", 
                                                      ondelete="CASCADE"),
                                                      primary_key=True)
-
     locate: Mapped[Locate]
     log_channel_id: Mapped[snowflake]
     welcome_channel_id: Mapped[snowflake]
