@@ -14,11 +14,12 @@ from database.db import Base
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 snowflake = Annotated[int, mapped_column(BigInteger)]
-created_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"))]
+created_at = Annotated[datetime.datetime, mapped_column(server_default=text("UTC_TIMESTAMP()"))]
 updated_at = Annotated[datetime.datetime, mapped_column(
-        server_default=text("TIMEZONE('utc', now())"),
-        onupdate=datetime.datetime.utcnow,
-    )]
+    server_default=text("UTC_TIMESTAMP()"),
+    onupdate=datetime.datetime.utcnow,
+)]
+
 
 class GuildsOrm(Base):
     __tablename__ = "guilds"
