@@ -51,7 +51,7 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         name="test",
         description="test",
     )
-   
+    @app_commands.guilds(GUILD)
     async def test(self, interaction: discord.Interaction, channel_type: ChannelType ):
         await interaction.response.defer()
         print(interaction.channel_id)
