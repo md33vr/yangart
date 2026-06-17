@@ -4,7 +4,8 @@ from typing import Annotated, Optional
 
 from sqlalchemy import (
     BigInteger,
-    ForeignKey,   
+    ForeignKey,
+    String,   
     text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -25,7 +26,7 @@ class GuildsOrm(Base):
     __tablename__ = "guilds"
 
     guild_id: Mapped[snowflake] = mapped_column(primary_key=True)
-    guild_name: Mapped[str]
+    guild_name: Mapped[str] = mapped_column(String(116))
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
     bot_instance_id: Mapped[snowflake]
