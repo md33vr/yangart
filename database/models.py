@@ -43,7 +43,7 @@ class ChannelType(enum.Enum):
 class GuildSettingsOrm(Base):
     __tablename__ = "guild_settings"
     
-    guild_id: Mapped[int] = mapped_column(ForeignKey("guilds.guild_id", ondelete="CASCADE"), primary_key=True),
+    guild_id: Mapped[int] = mapped_column(ForeignKey("guilds.guild_id", ondelete="CASCADE"), primary_key=True)
     
     
     locate: Mapped[Locate] = mapped_column(default= Locate.ru)
