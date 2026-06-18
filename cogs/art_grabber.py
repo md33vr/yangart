@@ -13,6 +13,11 @@ log = logging.getLogger(__name__)
 
 
 class Artgrabber(commands.Cog, name="art_grabber"):
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        await AsyncOrm.add_guild(guild.id, guild.name, self.bot.user.id)
+
     BASE_URL = "https://danbooru.donmai.us"
     HEADERS = {"user-agent": "prop.spell"}
 
