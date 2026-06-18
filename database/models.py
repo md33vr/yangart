@@ -43,14 +43,14 @@ class ChannelType(enum.Enum):
 class GuildSettingsOrm(Base):
     __tablename__ = "guild_settings"
     
-    guild_id: Mapped[int] = mapped_column(ForeignKey("guilds.guild_id", 
-                                                     ondelete="CASCADE"),
-                                                     primary_key=True)
-    locate: Mapped[Locate]
-    log_channel_id: Mapped[snowflake]
-    welcome_channel_id: Mapped[snowflake]
-    nsfw_channel_id: Mapped[snowflake]
-    is_welcome_enb: Mapped[bool]
-    is_logging_enb: Mapped[bool]
+    guild_id: Mapped[int] = mapped_column(ForeignKey("guilds.guild_id", ondelete="CASCADE"), primary_key=True),
+    
+    
+    locate: Mapped[Locate] = mapped_column(default= Locate.ru)
+    log_channel_id: Mapped[Optional[snowflake]]
+    welcome_channel_id: Mapped[Optional[snowflake]]
+    nsfw_channel_id: Mapped[Optional[snowflake]]
+    is_welcome_enb: Mapped[bool] = mapped_column(default= False)
+    is_logging_enb: Mapped[bool] = mapped_column(default= False)
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
