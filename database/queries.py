@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from database.db import engine,session_factory, Base
 import database.models
 from database.models import ChannelType, GuildSettingsOrm, GuildsOrm
@@ -26,3 +28,12 @@ class AsyncOrm:
                 session.add(nsfw_channel)
                 await session.flush()
                 await session.commit()
+
+
+    @staticmethod
+    async def select_channel(guild_id: int, channel: ChannelType):
+        async with session_factory() as session:
+            if channel is ChannelType.nsfw:
+                query= (select(GuildSettingsOrm.nsfw_channel_id).where(GuildSettingsOrm.guild_id == guild_id))
+                res = await session.execute(query)
+                return res.scalar_one_or_none()
