@@ -43,8 +43,8 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         if interaction.channel_id == r_channel_id:
             params = {"tags": f"{query} -rating:g", "limit": 1, "random": True}
         else:
-            params = {"tags": query, "limit": 1, "random": True, "rating": "g"}
-            
+            params = {"tags": f"{query} rating: g", "limit": 1, "random": True}
+        print(str(params))
         
         posts = self.get_data("/posts.json", params)
         
