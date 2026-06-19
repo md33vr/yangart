@@ -42,7 +42,6 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         print(interaction.channel_id)
         if interaction.channel_id == chid:
             params = {"tags": f"{query} -rating:g", "limit": 1, "random": True}
-        print(params)
         posts = self.get_data("/posts.json", params)
         if not posts:
             await interaction.followup.send("Empty page")
