@@ -37,8 +37,12 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         query = tags.replace(" ", "_").replace(":", " ")
         
         params = {"tags": query, "limit": 1, "random": True, "rating": "g"}
-        if interaction.channel_id == await AsyncOrm.select_channel(interaction.guild_id, ChannelType.nsfw):
+        chid = await AsyncOrm.select_channel(interaction.guild_id, ChannelType.nsfw)
+        print(chid)
+        print(interaction.channel_id)
+        if interaction.channel_id == chid:
             params = {"tags": f"{query} -rating:g", "limit": 1, "random": True}
+        print(params)
         posts = self.get_data("/posts.json", params)
         if not posts:
             await interaction.followup.send("Empty page")
