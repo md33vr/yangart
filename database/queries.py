@@ -38,7 +38,11 @@ class AsyncOrm:
     @staticmethod
     async def select_channel(guild_id: int, channel: ChannelType):
         async with session_factory() as session:
-            if channel is ChannelType.nsfw:
-                query= (select(GuildSettingsOrm.nsfw_channel_id).where(GuildSettingsOrm.guild_id == guild_id))
-                res = await session.execute(query)
-                return res.scalar_one_or_none()
+            settings = await session.get(GuildSettingsOrm, guild_id)
+            
+
+            if settings:
+                getattr(settings, f"{channel.value}_id")
+                return getattr(settings, f"{channel.value}_id")
+            else:
+                return None

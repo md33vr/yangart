@@ -65,14 +65,15 @@ class Artgrabber(commands.Cog, name="art_grabber"):
             log.error("request error: %s", e)
             return None
     @app_commands.command(
-        name="setnsfw",
+        name="setchannel",
         description="test",
     )
     @app_commands.guilds(GUILD)
-    async def set_nsfw(self, interaction: discord.Interaction, channel_type: ChannelType ):
+    async def set_channel(self, interaction: discord.Interaction, channel_type: ChannelType ):
         await interaction.response.defer()
         print(interaction.channel_id)
         try:
+            old_channel_id = await AsyncOrm.select_channel(interaction.guild_id, channel_type)
             await AsyncOrm.update_chanell(interaction.guild_id,channel_type, interaction.channel_id)
             await interaction.channel.edit(nsfw= True)
             await interaction.followup.send("канал: " + str(interaction.channel_id) + " установлен как nsfw")
