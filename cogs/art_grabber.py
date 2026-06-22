@@ -37,10 +37,9 @@ class Artgrabber(commands.Cog, name="art_grabber"):
 
         query = tags.replace(" ", "_").replace(":", " ")
         params = {"tags": query, "limit": 1, "random": True}
-        r_channel_id= await AsyncOrm.select_channel(interaction.guild_id, ChannelType.nsfw)
-        print(r_channel_id)
+        base_url = ""
         print(interaction.channel_id)
-        if interaction.channel_id == r_channel_id:
+        if interaction.channel.nsfw:
             BASE_URL =  self.NSFW_URL
         else:
             BASE_URL = self.SAFE_URL
@@ -57,7 +56,7 @@ class Artgrabber(commands.Cog, name="art_grabber"):
 
     def get_data(self, ex_url: str, params: dict):
         try:
-            response = self.session.get(self.BASE_URL + ex_url, params=params)
+            response = self.session.get(self.base_url + ex_url, params=params)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
