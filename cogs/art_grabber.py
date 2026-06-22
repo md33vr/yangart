@@ -73,8 +73,8 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         await interaction.response.defer()
         print(interaction.channel_id)
         try:
-            await interaction.channel.edit(nsfw= True)
             await AsyncOrm.update_chanell(interaction.guild_id,channel_type, interaction.channel_id)
+            await interaction.channel.edit(nsfw= True)
             await interaction.followup.send("канал: " + str(interaction.channel_id) + " установлен как nsfw")
         except:
             await interaction.followup.send("не удалось установить nsfw канал")

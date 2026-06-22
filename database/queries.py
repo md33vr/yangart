@@ -16,20 +16,23 @@ class AsyncOrm:
     @staticmethod
     async def add_guild(guild_id: int, guild_name: str, bot_instance_id: int):
         async with session_factory() as session:
-            guild = insert(GuildsOrm).values(guild_id = guild_id, guild_name = guild_name,bot_instance_id = bot_instance_id)
-            session.add(guild)
+            stmt=(GuildsOrm(guild_id = guild_id, guild_name = guild_name,bot_instance_id = bot_instance_id))
+            session.add(stmt)
             await session.flush()
             await session.commit()
 
     @staticmethod
     async def update_chanell(guild_id: int,channel: ChannelType, chanell_id: int):
         async with session_factory() as session:
-            if channel is ChannelType.nsfw:
-                stmt = insert(GuildSettingsOrm).values(guild_id = guild_id, nsfw_channel_id=chanell_id)
-                stmt = stmt.on_duplicate_key_update(nsfw_channel_id = stmt.inserted.nsfw_channel_id)
-                session.add(stmt)
-                await session.flush()
+                settings = await session.get(GuildSettingsOrm, guild_id)
+                if settings:
+                    setattr(settings, f"{channel.value}_id", chanell_id)
+                else:
+                    new = GuildSettingsOrm(guild_id=guild_id)
+                    setattr(new, f"{channel.value}_id", chanell_id)
+                    session.add(new)
                 await session.commit()
+
 
 
     @staticmethod
