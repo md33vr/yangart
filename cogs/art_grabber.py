@@ -21,6 +21,7 @@ class Artgrabber(commands.Cog, name="art_grabber"):
     NSFW_URL = "https://danbooru.donmai.us"
     SAFE_URL = "https://safebooru.donmai.us/"
     HEADERS = {"user-agent": "prop.spell"}
+    base_url = ""
 
     def __init__(self, bot) -> None:
         self.bot = bot
@@ -37,12 +38,12 @@ class Artgrabber(commands.Cog, name="art_grabber"):
 
         query = tags.replace(" ", "_").replace(":", " ")
         params = {"tags": query, "limit": 1, "random": True}
-        base_url = ""
+        
         print(interaction.channel_id)
         if interaction.channel.nsfw:
-            BASE_URL =  self.NSFW_URL
+            base_url =  self.NSFW_URL
         else:
-            BASE_URL = self.SAFE_URL
+            base_url = self.SAFE_URL
 
         print(str(params))
         
