@@ -36,15 +36,15 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         await interaction.response.defer()
 
         query = tags.replace(" ", "_").replace(":", " ")
-        base_url
+        BASE_URL
         params = {"tags": query, "limit": 1, "random": True}
         r_channel_id= await AsyncOrm.select_channel(interaction.guild_id, ChannelType.nsfw)
         print(r_channel_id)
         print(interaction.channel_id)
         if interaction.channel_id == r_channel_id:
-            base_url =  self.NSFW_URL
+            BASE_URL =  self.NSFW_URL
         else:
-            base_url = self.SAFE_URL
+            BASE_URL = self.SAFE_URL
 
         print(str(params))
         
