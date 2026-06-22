@@ -41,9 +41,9 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         
         print(interaction.channel_id)
         if interaction.channel.nsfw:
-            base_url =  self.NSFW_URL
+            self.base_url =  self.NSFW_URL
         else:
-            base_url = self.SAFE_URL
+            self.base_url = self.SAFE_URL
 
         print(str(params))
         
