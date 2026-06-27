@@ -18,10 +18,8 @@ class Artgrabber(commands.Cog, name="art_grabber"):
     async def on_guild_join(self, guild):
         await AsyncOrm.add_guild(guild.id, guild.name, self.bot.user.id)
 
-    NSFW_URL = "https://danbooru.donmai.us"
-    SAFE_URL = "https://safebooru.donmai.us/"
+    BASE_URL = "https://gelbooru.com"
     HEADERS = {"user-agent": "prop.spell"}
-    base_url = ""
 
     def __init__(self, bot) -> None:
         self.bot = bot
@@ -37,27 +35,25 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         await interaction.response.defer()
 
         query = tags.replace(" ", "_").replace(":", " ")
-        params = {"tags": query, "limit": 1, "random": True}
+        params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1"}
         
         print(interaction.channel_id)
         if interaction.channel.nsfw:
-            self.base_url =  self.NSFW_URL
-        else:
-            self.base_url = self.SAFE_URL
+            params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1"}
 
         print(str(params))
         
-        posts = self.get_data("/posts.json", params)
+        posts = self.get_data("/index.php?page=dapi&s=post&q=index", params)
         
         if not posts:
             await interaction.followup.send("Empty page")
             return
 
-        await interaction.followup.send(posts[0]["file_url"])
+        await interaction.followup.send(posts["post"][0]["file_url"])
 
     def get_data(self, ex_url: str, params: dict):
         try:
-            response = self.session.get(self.base_url + ex_url, params=params)
+            response = self.session.get(self.BASE_URL + ex_url, params=params)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
