@@ -35,7 +35,7 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         await interaction.response.defer()
 
         query = tags.replace(" ", "_").replace(":", " ")
-        params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1", "api_key": API_KEY, "user_id": USER_ID}
+        params = {"tags": f"{query} sort:random rating:general", "limit": 1, "json": "1", "api_key": API_KEY, "user_id": USER_ID}
         
         print(interaction.channel_id)
         if interaction.channel.nsfw:
