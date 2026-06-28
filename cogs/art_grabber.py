@@ -7,7 +7,7 @@ from discord.ext import commands
 from config import GUILD
 from database.queries import AsyncOrm
 from database.models import ChannelType
-from config import API_KEY
+from config import API_KEY, USER_ID
 
 log = logging.getLogger(__name__)
 
@@ -35,11 +35,11 @@ class Artgrabber(commands.Cog, name="art_grabber"):
         await interaction.response.defer()
 
         query = tags.replace(" ", "_").replace(":", " ")
-        params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1", "api_key": API_KEY}
+        params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1", "api_key": API_KEY, "user_id": USER_ID}
         
         print(interaction.channel_id)
         if interaction.channel.nsfw:
-            params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1", "api_key": API_KEY}
+            params = {"tags": f"{query} sort:random rating:explicit", "limit": 1, "json": "1", "api_key": API_KEY, "user_id": USER_ID}
 
         print(str(params))
         
