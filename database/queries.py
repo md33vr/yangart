@@ -3,7 +3,7 @@ from sqlalchemy import select
 from database.db import engine,session_factory, Base
 import database.models
 from sqlalchemy.dialects.mysql import insert
-from database.models import ChannelType, GuildSettingsOrm, GuildsOrm
+from database.models import AccessPullOrm, ChannelType, AccessLvl, GuildSettingsOrm, GuildsOrm
 
 
 class AsyncOrm:
@@ -42,7 +42,22 @@ class AsyncOrm:
             
 
             if settings:
-                getattr(settings, f"{channel.value}_id")
                 return getattr(settings, f"{channel.value}_id")
             else:
                 return None
+    
+    @staticmethod
+    async def access_add(guild_id: int, user_id: int, access_lvl: AccessLvl):
+        async with session_factory() as session:
+            query = select(AccessPullOrm).where(
+            AccessPullOrm.guild_id == guild_id,
+            AccessPullOrm.user_id == user_id
+            )
+            res = await session.execute(query)
+            settings = res.scalar_one_or_none()
+
+            if settings:
+                settings.access_lvl = access_lvl
+            else:
+                session.add(AccessPullOrm(guild_id=guild_id, user_id=user_id, access_lvl=access_lvl))
+            await session.commit()

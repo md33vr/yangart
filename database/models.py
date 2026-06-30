@@ -60,7 +60,7 @@ class GuildSettingsOrm(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
-class AccessPull(Base):
+class AccessPullOrm(Base):
     __tablename__ = "access_pull"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     guild_id: Mapped[snowflake]= mapped_column(ForeignKey("guilds.guild_id", ondelete="CASCADE"))
